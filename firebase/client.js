@@ -24,12 +24,11 @@ const mapUserFromFirebaseAuthToUser = (user) => {
   };
 };
 
-export const onAuthStateChanged = (onChange) => {
-  return firebase.auth().onAuthStateChanged((user) => {
+export const onAuthStateChanged = (onChange) =>
+  firebase.auth().onAuthStateChanged((user) => {
     const normalizedUser = mapUserFromFirebaseAuthToUser(user);
     onChange(normalizedUser);
   });
-};
 
 export const loginWithGithub = () => {
   const githubProvider = new firebase.auth.GithubAuthProvider();
