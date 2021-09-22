@@ -1,20 +1,22 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/dist/client/router";
+import { useEffect } from "react";
+import { colors } from "../styles/theme";
 import Button from "../components/Button";
 import Github from "../components/icons/Github";
-import { colors } from "../styles/theme";
-
-import { loginWithGithub, onAuthStateChanged } from "../firebase/client";
+import { loginWithGithub } from "../firebase/client";
+import useUser, { USER_STATES } from "../hooks/useUser";
 
 export default function Home() {
-  const [user, setUser] = useState(undefined);
+  const user = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(setUser);
-  }, []);
+    user && router.replace("/home");
+  }, [user]);
 
   const handleClick = () => {
-    loginWithGithub().then(setUser).catch(console.log);
+    loginWithGithub().catch(console.log);
   };
 
   return (
@@ -31,7 +33,7 @@ export default function Home() {
         <h2>
           Talk about development <br /> with developers 👨‍💻 👩‍💻
         </h2>
-        {user === null && (
+        {user === USER_STATES.NOT_LOGGED && (
           <div>
             <Button onClick={handleClick}>
               <Github fill="#fff" />
@@ -39,11 +41,8 @@ export default function Home() {
             </Button>
           </div>
         )}
-        {user && user.avatar && (
-          <div>
-            <img src={user.avatar} alt="Avatar" />
-            <strong>{user.username}</strong>
-          </div>
+        {user === USER_STATES.NOT_KNOWN && (
+          <img src="/spinner.gif" alt="spinner" />
         )}
       </section>
 

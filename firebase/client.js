@@ -13,24 +13,54 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 const mapUserFromFirebaseAuthToUser = (user) => {
-  if (!user) return null;
-  const { displayName, email, photoURL } = user;
+  const { displayName, email, photoURL, uid } = user;
   return {
     avatar: photoURL,
     username: displayName,
     email,
+    uid,
   };
 };
 
 export const onAuthStateChanged = (onChange) =>
   firebase.auth().onAuthStateChanged((user) => {
-    const normalizedUser = mapUserFromFirebaseAuthToUser(user);
+    const normalizedUser = user ? mapUserFromFirebaseAuthToUser(user) : null;
     onChange(normalizedUser);
   });
 
 export const loginWithGithub = () => {
   const githubProvider = new firebase.auth.GithubAuthProvider();
   return firebase.auth().signInWithPopup(githubProvider);
+};
+
+export const addTweet = ({ avatar, content, userId, userName }) => {
+  return db.collection("tweets").add({
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    likesCounte: 0,
+    sharedCount: 0,
+  });
+};
+
+export const fetchLatestTweets = () => {
+  return db
+    .collection("tweets")
+    .get()
+    .then((snapshot) => {
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const { id } = doc;
+
+        return {
+          id,
+          ...data,
+        };
+      });
+    });
 };

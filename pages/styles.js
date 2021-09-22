@@ -1,6 +1,6 @@
 import css from "styled-jsx/css";
 
-import { breakpoints, colors } from "../styles/theme";
+import { breakpoints, colors, fonts } from "../styles/theme";
 import { addOpacityToColor } from "../styles/utils";
 
 const backgroundColor = addOpacityToColor(colors.primary, 0.3);
@@ -14,12 +14,17 @@ export const globalStyles = css.global`
     background-size: 50px 50px;
     padding: 0;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    overflow: hidden;
+    font-family: ${fonts.base};
   }
 
   * {
     box-sizing: border-box;
+  }
+
+  textarea,
+  input {
+    font-family: ${fonts.base};
   }
 `;
 
@@ -35,6 +40,8 @@ export default css`
     border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     height: 100%;
+    overflow-y: auto;
+    position: relative;
     width: 100%;
   }
 

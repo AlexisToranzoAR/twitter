@@ -23,5 +23,8 @@ module.exports = {
     "react/react-in-jsx-scope": RULES.OFF,
     "react/jsx-filename-extension": RULES.OFF,
     "import/no-unresolved": RULES.OFF,
+    "react/prop-types": RULES.OFF,
+    "no-unused-expressions": RULES.OFF,
+    "arrow-body-style": RULES.OFF,
   },
 };
