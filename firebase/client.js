@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import 'firebase/compat/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyANxCcsaVCDh7VmH2C4NLFBd5mtPMAY2Wo",
@@ -36,11 +37,12 @@ export const loginWithGithub = () => {
   return firebase.auth().signInWithPopup(githubProvider);
 };
 
-export const addTweet = ({ avatar, content, userId, userName }) => {
+export const addTweet = ({ avatar, content, userId, img, userName }) => {
   return db.collection("tweets").add({
     avatar,
     content,
     userId,
+    img,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     likesCounte: 0,
@@ -51,16 +53,26 @@ export const addTweet = ({ avatar, content, userId, userName }) => {
 export const fetchLatestTweets = () => {
   return db
     .collection("tweets")
+    .orderBy("createdAt", "desc")
     .get()
-    .then((snapshot) => {
-      return snapshot.docs.map((doc) => {
+    .then(({ docs }) => {
+      return docs.map((doc) => {
         const data = doc.data();
         const { id } = doc;
+        const { createdAt } = data;
 
         return {
-          id,
           ...data,
+          id,
+          createdAt: +createdAt.toDate(),
         };
       });
     });
+};
+
+export const uploadImage = (file) => {
+  const storage = firebase.storage()
+  const ref = storage.ref(`image/${file.name}`);
+  const task = ref.put(file);
+  return task;
 };

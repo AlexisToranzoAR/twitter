@@ -1,18 +1,10 @@
-import styles, { globalStyles } from "./styles";
+import AppLayout from "../components/AppLayout";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <>
-      <div>
-        <main>
-          <Component {...pageProps} />
-        </main>
-      </div>
-      <style jsx>{styles}</style>
-      <style jsx global>
-        {globalStyles}
-      </style>
-    </>
+    <AppLayout>
+      <Component {...pageProps} />
+    </AppLayout>
   );
 }
 
