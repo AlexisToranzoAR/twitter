@@ -157,6 +157,7 @@ export default function ComposeTweet() {
 
         form {
           padding: 10px;
+          width: 100%;
         }
 
         img {

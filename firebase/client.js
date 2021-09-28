@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import 'firebase/compat/storage';
+import "firebase/compat/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyANxCcsaVCDh7VmH2C4NLFBd5mtPMAY2Wo",
@@ -50,28 +50,40 @@ export const addTweet = ({ avatar, content, userId, img, userName }) => {
   });
 };
 
+const mapTweetFromFirebaseToTweetObject = (doc) => {
+  const data = doc.data();
+  const { id } = doc;
+  const { createdAt } = data;
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  };
+};
+
+export const listenLatestTweets = (callback) => {
+  return db
+    .collection("tweets")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(({ docs }) => {
+      const newTweets = docs.map(mapTweetFromFirebaseToTweetObject);
+      callback(newTweets);
+    });
+};
+
 export const fetchLatestTweets = () => {
   return db
     .collection("tweets")
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
-      return docs.map((doc) => {
-        const data = doc.data();
-        const { id } = doc;
-        const { createdAt } = data;
-
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        };
-      });
+      return docs.map(mapTweetFromFirebaseToTweetObject);
     });
 };
 
 export const uploadImage = (file) => {
-  const storage = firebase.storage()
+  const storage = firebase.storage();
   const ref = storage.ref(`image/${file.name}`);
   const task = ref.put(file);
   return task;

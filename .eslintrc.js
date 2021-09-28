@@ -35,5 +35,6 @@ module.exports = {
     "jsx-a11y/no-noninteractive-element-interactions": RULES.OFF,
     "jsx-a11y/anchor-is-valid": RULES.OFF,
     "consistent-return": RULES.OFF,
+    "no-shadow": RULES.OFF,
   },
 };

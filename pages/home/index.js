@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Tweet from "../../components/Tweet";
-import { fetchLatestTweets } from "../../firebase/client";
+import { listenLatestTweets } from "../../firebase/client";
 import useUser from "../../hooks/useUser";
 import Create from "../../components/Icons/Create";
 import Home from "../../components/Icons/Home";
@@ -14,7 +14,11 @@ export default function HomePage() {
   const user = useUser();
 
   useEffect(() => {
-    user && fetchLatestTweets().then(setTimeLine);
+    let unsuscribe;
+    if (user) {
+      unsuscribe = listenLatestTweets(setTimeLine);
+    }
+    return () => unsuscribe && unsuscribe();
   }, [user]);
 
   return (
