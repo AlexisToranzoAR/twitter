@@ -170,7 +170,7 @@ export default function ComposeTweet() {
 
         .avatar-container {
           padding-top: 20px;
-          padding-left: 10px;
+          padding-left: 20px;
         }
 
         div {
