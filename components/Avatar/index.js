@@ -1,4 +1,11 @@
-export default function Avatar({ alt, src, text, withText }) {
+export default function Avatar({
+  alt,
+  src,
+  text,
+  withText,
+  width = "49px",
+  height = "49px",
+}) {
   return (
     <>
       <div>
@@ -9,8 +16,8 @@ export default function Avatar({ alt, src, text, withText }) {
       <style jsx>{`
         img {
           border-radius: 9999px;
-          height: 49px;
-          width: 49px;
+          height: ${width};
+          width: ${height};
         }
 
         img + strong {
