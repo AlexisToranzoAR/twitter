@@ -3,15 +3,7 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyANxCcsaVCDh7VmH2C4NLFBd5mtPMAY2Wo",
-  authDomain: "twitter-be7ec.firebaseapp.com",
-  projectId: "twitter-be7ec",
-  storageBucket: "twitter-be7ec.appspot.com",
-  messagingSenderId: "231317440655",
-  appId: "1:231317440655:web:1b4f27c48817e8002588fa",
-  measurementId: "G-BY2P5XQ95R",
-};
+const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
