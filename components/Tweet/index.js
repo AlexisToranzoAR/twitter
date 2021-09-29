@@ -74,6 +74,10 @@ export default function Tweet({
           color: #555;
           font-size: 14px;
         }
+
+        a {
+          text-decoration: none;
+        }
       `}</style>
     </>
   );

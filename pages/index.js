@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import { colors } from "../styles/theme";
 import Button from "../components/Button";
-import Github from "../components/icons/Github";
+import Github from "../components/Icons/Github";
 import { loginWithGithub } from "../firebase/client";
 import useUser, { USER_STATES } from "../hooks/useUser";
 

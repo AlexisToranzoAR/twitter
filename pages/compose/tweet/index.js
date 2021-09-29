@@ -100,7 +100,7 @@ export default function ComposeTweet() {
         <div onClick={router.back} role="button" tabIndex={0}>
           <ArrowLeft width={19} height={19} stroke="#0F1419" />
         </div>
-        <Button type="submit" disabled={isButtonDisabled}>
+        <Button form="TweetForm" type="submit" disabled={isButtonDisabled}>
           Twittear
         </Button>
       </header>
@@ -110,7 +110,7 @@ export default function ComposeTweet() {
             <Avatar src={user.avatar} />
           </section>
         )}
-        <form onSubmit={handleSubmit}>
+        <form id="TweetForm" onSubmit={handleSubmit}>
           <textarea
             onChange={handleChange}
             onDragEnter={handleDragEnter}
