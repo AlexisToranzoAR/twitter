@@ -29,12 +29,13 @@ export const loginWithGithub = () => {
   return firebase.auth().signInWithPopup(githubProvider);
 };
 
-export const addTweet = ({ avatar, content, userId, img, userName }) => {
+export const addTweet = ({ avatar, content, userId, img, video, userName }) => {
   return db.collection("tweets").add({
     avatar,
     content,
     userId,
     img,
+    video,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     likesCounte: 0,
@@ -76,7 +77,15 @@ export const fetchLatestTweets = () => {
 
 export const uploadImage = (file) => {
   const storage = firebase.storage();
-  const ref = storage.ref(`image/${file.name}`);
-  const task = ref.put(file);
-  return task;
+  if (file.type === "video/mp4") {
+    const ref = storage.ref(`video/${file.name}`);
+    const task = ref.put(file);
+    return task;
+  }
+  if (file.type === "image/jpeg") {
+    const ref = storage.ref(`image/${file.name}`);
+    const task = ref.put(file);
+    return task;
+  }
+  return null;
 };

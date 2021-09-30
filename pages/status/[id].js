@@ -11,6 +11,7 @@ export default function TweetPage({
   content,
   createdAt,
   img,
+  video,
   id,
 }) {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function TweetPage({
         <h2>Tweet</h2>
       </header>
       <section>
-        <Tweet {...{ avatar, userName, content, createdAt, img, id }} />
+        <Tweet {...{ avatar, userName, content, createdAt, img, video, id }} />
       </section>
       <Navbar />
 

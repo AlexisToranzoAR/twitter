@@ -8,6 +8,7 @@ import { addTweet, uploadImage } from "../../../firebase/client";
 import Avatar from "../../../components/Avatar";
 import ArrowLeft from "../../../components/Icons/ArrowLeft";
 import Navbar from "../../../components/Navbar";
+import Cross from "../../../components/Icons/Cross";
 
 const COMPOSE_STATUS = {
   USER_NOT_KNOWN: 0,
@@ -31,16 +32,26 @@ export default function ComposeTweet() {
   const [drag, setDrag] = useState(DRAG_IMAGE_STATES.NONE);
   const [task, setTask] = useState(null);
   const [imgURL, setImgURL] = useState(null);
+  const [videoURL, setVideoURL] = useState(null);
 
   const user = useUser();
   const router = useRouter();
 
   useEffect(() => {
     if (task) {
-      const onProgress = () => {};
-      const onError = () => {};
+      const onProgress = () => {
+        setDrag(DRAG_IMAGE_STATES.UPLOADING);
+      };
+      const onError = () => {
+        setDrag(DRAG_IMAGE_STATES.ERROR);
+      };
       const onComplete = () => {
-        task.snapshot.ref.getDownloadURL().then(setImgURL);
+        setDrag(DRAG_IMAGE_STATES.COMPLETE);
+        if (task.snapshot.task.snapshot.metadata.contentType === "video/mp4") {
+          task.snapshot.ref.getDownloadURL().then(setVideoURL);
+        } else {
+          task.snapshot.ref.getDownloadURL().then(setImgURL);
+        }
       };
       task.on("state_changed", onProgress, onError, onComplete);
     }
@@ -59,6 +70,7 @@ export default function ComposeTweet() {
       content: message,
       userId: user.uid,
       img: imgURL,
+      video: videoURL,
       userName: user.username,
     })
       .then(() => {
@@ -120,9 +132,27 @@ export default function ComposeTweet() {
             value={message}
           />
           {imgURL && (
-            <section className="remove-img">
-              <button onClick={() => setImgURL(null)}>x</button>
-              <imga alt="Tweet image" src={imgURL} />
+            <section className="remove-media-content">
+              <button onClick={() => setImgURL(null)}>
+                <Cross />
+              </button>
+              <img alt="Tweet" src={imgURL} />
+            </section>
+          )}
+          {videoURL && (
+            <section className="remove-media-content">
+              <button onClick={() => setVideoURL(null)}>
+                <Cross />
+              </button>
+              <video
+                src={videoURL}
+                preload="auto"
+                autoPlay="autoplay"
+                controls
+                loop
+              >
+                Sorry, your browser doesn&apos;t support embedded videos.
+              </video>
             </section>
           )}
         </form>
@@ -144,21 +174,30 @@ export default function ComposeTweet() {
           width: 100%;
         }
 
-        button {
-          background: rgba(0, 0, 0, 0.3);
-          border: 0;
-          border-radius: 999px;
-          color: #fff;
-          cursor: pointer;
-          font-size: 24px;
-          width: 32px;
-          height: 32px;
-          top: 15px;
-          position: absolute;
-          right: 14px;
+        video {
+          border-radius: 16px;
+          height: auto;
+          width: 100%;
         }
 
-        .remove-image {
+        button {
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 999px;
+          border: 0;
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          font-size: 24px;
+          height: 32px;
+          position: absolute;
+          right: 14px;
+          top: 15px;
+          width: 32px;
+          z-index: 1;
+          align-items: center;
+        }
+
+        .remove-media-content {
           position: relative;
         }
 
@@ -185,7 +224,7 @@ export default function ComposeTweet() {
         }
 
         img {
-          border-radius: 10px;
+          border-radius: 16px;
           height: auto;
           width: 100%;
         }

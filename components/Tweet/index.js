@@ -10,6 +10,7 @@ export default function Tweet({
   content,
   createdAt,
   img,
+  video,
   id,
 }) {
   const timeago = useTimeago(createdAt);
@@ -39,6 +40,11 @@ export default function Tweet({
           </header>
           <p>{content}</p>
           {img && <img alt="Uploaded file" src={img} />}
+          {video && (
+            <video src={video} preload="auto" autoPlay="autoplay" controls loop>
+              Sorry, your browser doesn&apos;t support embedded videos.
+            </video>
+          )}
         </section>
       </article>
 
@@ -59,7 +65,14 @@ export default function Tweet({
         }
 
         img {
-          border-radius: 10px;
+          border-radius: 16px;
+          height: auto;
+          margin-top: 10px;
+          width: 100%;
+        }
+
+        video {
+          border-radius: 16px;
           height: auto;
           margin-top: 10px;
           width: 100%;
