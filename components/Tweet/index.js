@@ -22,6 +22,10 @@ export default function Tweet({
     router.push(`/status/${id}`);
   };
 
+  const stopClickPropagation = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <>
       <article onClick={handleArticleClick}>
@@ -41,7 +45,7 @@ export default function Tweet({
           <p>{content}</p>
           {img && <img alt="Uploaded file" src={img} />}
           {video && (
-            <video src={video} preload="auto" autoPlay="autoplay" controls loop>
+            <video onClick={stopClickPropagation} src={video} preload="auto" controls loop>
               Sorry, your browser doesn&apos;t support embedded videos.
             </video>
           )}
@@ -51,13 +55,13 @@ export default function Tweet({
       <style jsx>{`
         article {
           border-bottom: 2px solid #eee;
-          padding: 10px 15px;
+          cursor: pointer;
           display: flex;
+          padding: 10px 15px;
         }
 
         article:hover {
           background: #f5f8fa;
-          cursor: pointer;
         }
 
         div {
@@ -73,6 +77,7 @@ export default function Tweet({
 
         video {
           border-radius: 16px;
+          cursor: default;
           height: auto;
           margin-top: 10px;
           width: 100%;

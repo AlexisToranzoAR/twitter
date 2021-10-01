@@ -68,6 +68,7 @@ export default function HomePage() {
 
         section {
           flex: 1;
+          overflow: auto;
         }
 
         h2 {
