@@ -3,6 +3,10 @@ import { useRouter } from "next/router";
 import Avatar from "../Avatar";
 import useTimeago from "../../hooks/useTimeago";
 import useDateTimeFormat from "../../hooks/useDateTimeFormat";
+import SpeechBuble from "../Icons/SpeechBuble";
+import Retweet from "../Icons/Retweet";
+import Heart from "../Icons/Heart";
+import Share from "../Icons/Share";
 
 export default function Tweet({
   avatar,
@@ -45,14 +49,37 @@ export default function Tweet({
           <p>{content}</p>
           {img && <img alt="Uploaded file" src={img} />}
           {video && (
-            <video onClick={stopClickPropagation} src={video} preload="auto" controls loop>
+            <video
+              onClick={stopClickPropagation}
+              src={video}
+              preload="auto"
+              controls
+              loop
+            >
               Sorry, your browser doesn&apos;t support embedded videos.
             </video>
           )}
+          <footer>
+            <SpeechBuble width={20} height={20} stroke="#555" />
+            <Retweet width={20} height={20} stroke="#555" />
+            <Heart width={20} height={20} stroke="#555" />
+            <Share width={20} height={20} stroke="#555" />
+          </footer>
         </section>
       </article>
 
       <style jsx>{`
+        footer {
+          margin-top: 5px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        section {
+          width: 100%;
+        }
+
         article {
           border-bottom: 2px solid #eee;
           cursor: pointer;
