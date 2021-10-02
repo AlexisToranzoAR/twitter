@@ -31,7 +31,7 @@ export default function ComposeTweet() {
 
   const [drag, setDrag] = useState(DRAG_IMAGE_STATES.NONE);
   const [task, setTask] = useState(null);
-  const [imgURL, setImgURL] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
 
   const user = useUser();
@@ -50,7 +50,7 @@ export default function ComposeTweet() {
         if (task.snapshot.task.snapshot.metadata.contentType === "video/mp4") {
           task.snapshot.ref.getDownloadURL().then(setVideoURL);
         } else {
-          task.snapshot.ref.getDownloadURL().then(setImgURL);
+          task.snapshot.ref.getDownloadURL().then(setImageURL);
         }
       };
       task.on("state_changed", onProgress, onError, onComplete);
@@ -68,8 +68,8 @@ export default function ComposeTweet() {
     addTweet({
       avatar: user.avatar,
       content: message,
-      userId: user.uid,
-      img: imgURL,
+      id: user.uid,
+      image: imageURL,
       video: videoURL,
       userName: user.username,
     })
@@ -131,12 +131,12 @@ export default function ComposeTweet() {
             placeholder="¿Qué está pasando?"
             value={message}
           />
-          {imgURL && (
+          {imageURL && (
             <section className="remove-media-content">
-              <button onClick={() => setImgURL(null)}>
+              <button onClick={() => setImageURL(null)}>
                 <Cross />
               </button>
-              <img alt="Tweet" src={imgURL} />
+              <img alt="Tweet" src={imageURL} />
             </section>
           )}
           {videoURL && (

@@ -38,14 +38,14 @@ export default function HomePage() {
       <section>
         {timeline.map((tweet) => (
           <Tweet
-            avatar={tweet.avatar}
+            avatar={tweet.user.avatar}
             content={tweet.content}
             createdAt={tweet.createdAt}
             id={tweet.id}
-            img={tweet.img}
+            image={tweet.image}
             key={tweet.id}
-            userId={tweet.userId}
-            userName={tweet.userName}
+            userId={tweet.user.id}
+            userName={tweet.user.userName}
             video={tweet.video}
           />
         ))}

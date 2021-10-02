@@ -13,7 +13,7 @@ export default function Tweet({
   userName,
   content,
   createdAt,
-  img,
+  image,
   video,
   id,
 }) {
@@ -47,7 +47,7 @@ export default function Tweet({
             </Link>
           </header>
           <p>{content}</p>
-          {img && <img alt="Uploaded file" src={img} />}
+          {image && <img alt="Uploaded file" src={image} />}
           {video && (
             <video
               onClick={stopClickPropagation}
@@ -62,7 +62,11 @@ export default function Tweet({
           <footer>
             <SpeechBuble width={20} height={20} stroke="#555" />
             <Retweet width={20} height={20} stroke="#555" />
-            <Heart width={20} height={20} stroke="#555" />
+            <Heart
+              width={20}
+              height={20}
+              stroke="#555"
+            />
             <Share width={20} height={20} stroke="#555" />
           </footer>
         </section>

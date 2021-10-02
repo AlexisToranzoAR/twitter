@@ -29,17 +29,20 @@ export const loginWithGithub = () => {
   return firebase.auth().signInWithPopup(githubProvider);
 };
 
-export const addTweet = ({ avatar, content, userId, img, video, userName }) => {
+export const addTweet = ({ avatar, content, id, image, video, userName }) => {
   return db.collection("tweets").add({
-    avatar,
     content,
-    userId,
-    img,
+    image,
     video,
-    userName,
+    comments: [],
+    retweets: [],
+    likes: [],
+    user: {
+      avatar,
+      id,
+      userName,
+    },
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
-    likesCounte: 0,
-    sharedCount: 0,
   });
 };
 
@@ -62,16 +65,6 @@ export const listenLatestTweets = (callback) => {
     .onSnapshot(({ docs }) => {
       const newTweets = docs.map(mapTweetFromFirebaseToTweetObject);
       callback(newTweets);
-    });
-};
-
-export const fetchLatestTweets = () => {
-  return db
-    .collection("tweets")
-    .orderBy("createdAt", "desc")
-    .get()
-    .then(({ docs }) => {
-      return docs.map(mapTweetFromFirebaseToTweetObject);
     });
 };
 
