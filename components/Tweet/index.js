@@ -46,7 +46,7 @@ export default function Tweet({
       },
     })
       .then((res) => res.json())
-      .catch((error) => console.error("Error:", error))
+      .catch((error) => console.error("Error:", error));
   };
 
   const handleClickShare = async (e, tweetId) => {
@@ -100,13 +100,13 @@ export default function Tweet({
             <div className="icon-container">
               {likes.find((like) => like.id === userId) ? (
                 <>
-                  <div className="icon-svg icon-svg-like">
-                    <Heart
-                      onClick={(e) => handleClickLike(e, id)}
-                      width={20}
-                      height={20}
-                      stroke="#f91880"
-                    />
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={(e) => handleClickLike(e, id)}
+                    className="icon-svg icon-svg-like"
+                  >
+                    <Heart width={20} height={20} stroke="#f91880" />
                   </div>
                   <div className="icon-quantity" style={{ color: "#f91880" }}>
                     {likes.length > 0 && likes.length}
@@ -114,13 +114,13 @@ export default function Tweet({
                 </>
               ) : (
                 <>
-                  <div className="icon-svg icon-svg-like">
-                    <Heart
-                      onClick={(e) => handleClickLike(e, id)}
-                      width={20}
-                      height={20}
-                      stroke="#536471"
-                    />
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={(e) => handleClickLike(e, id)}
+                    className="icon-svg icon-svg-like"
+                  >
+                    <Heart width={20} height={20} stroke="#536471" />
                   </div>
                   <div className="icon-quantity" style={{ color: "#536471" }}>
                     {likes.length > 0 && likes.length}
@@ -128,13 +128,13 @@ export default function Tweet({
                 </>
               )}
             </div>
-            <div className="icon-svg icon-svg-share">
-              <Share
-                onClick={(e) => handleClickShare(e, id)}
-                width={20}
-                height={20}
-                stroke="#536471"
-              />
+            <div
+              tabIndex={0}
+              role="button"
+              onClick={(e) => handleClickShare(e, id)}
+              className="icon-svg icon-svg-share"
+            >
+              <Share width={20} height={20} stroke="#536471" />
             </div>
           </footer>
         </section>
