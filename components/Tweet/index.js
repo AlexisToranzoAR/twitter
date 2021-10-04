@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Avatar from "../Avatar";
 import useTimeago from "../../hooks/useTimeago";
 import useDateTimeFormat from "../../hooks/useDateTimeFormat";
@@ -7,19 +8,23 @@ import SpeechBuble from "../Icons/SpeechBuble";
 import Retweet from "../Icons/Retweet";
 import Heart from "../Icons/Heart";
 import Share from "../Icons/Share";
+import { getUserToken } from "../../firebase/client";
 
 export default function Tweet({
   avatar,
   userName,
+  userId,
   content,
   createdAt,
   image,
+  likes,
   video,
   id,
 }) {
   const timeago = useTimeago(createdAt);
   const createdAtFormated = useDateTimeFormat(createdAt);
   const router = useRouter();
+  const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
   const handleArticleClick = (e) => {
     e.preventDefault();
@@ -30,10 +35,36 @@ export default function Tweet({
     e.stopPropagation();
   };
 
+  const handleClickLike = async (e, tweetId) => {
+    e.stopPropagation();
+    const userToken = await getUserToken();
+    fetch(`/api/tweet/like/${tweetId}`, {
+      method: "POST",
+      body: JSON.stringify({ userToken }), // data can be `string` or {object}!
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .catch((error) => console.error("Error:", error))
+  };
+
+  const handleClickShare = async (e, tweetId) => {
+    e.stopPropagation();
+    const baseURL = window.location.origin;
+    navigator.clipboard.writeText(`${baseURL}/status/${tweetId}`);
+    setShowCopiedToClipboard(true);
+    setTimeout(() => setShowCopiedToClipboard(false), 5000);
+  };
+
   return (
     <>
+      {showCopiedToClipboard && (
+        <div className="copied-to-clipboard">Copiado al portapapeles</div>
+      )}
+
       <article onClick={handleArticleClick}>
-        <div>
+        <div className="avatar-icon">
           <Avatar alt={userName} src={avatar} />
         </div>
         <section>
@@ -60,14 +91,51 @@ export default function Tweet({
             </video>
           )}
           <footer>
-            <SpeechBuble width={20} height={20} stroke="#555" />
-            <Retweet width={20} height={20} stroke="#555" />
-            <Heart
-              width={20}
-              height={20}
-              stroke="#555"
-            />
-            <Share width={20} height={20} stroke="#555" />
+            <div>
+              <SpeechBuble width={20} height={20} stroke="#536471" />
+            </div>
+            <div>
+              <Retweet width={20} height={20} stroke="#536471" />
+            </div>
+            <div className="icon-container">
+              {likes.find((like) => like.id === userId) ? (
+                <>
+                  <div className="icon-svg icon-svg-like">
+                    <Heart
+                      onClick={(e) => handleClickLike(e, id)}
+                      width={20}
+                      height={20}
+                      stroke="#f91880"
+                    />
+                  </div>
+                  <div className="icon-quantity" style={{ color: "#f91880" }}>
+                    {likes.length > 0 && likes.length}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="icon-svg icon-svg-like">
+                    <Heart
+                      onClick={(e) => handleClickLike(e, id)}
+                      width={20}
+                      height={20}
+                      stroke="#536471"
+                    />
+                  </div>
+                  <div className="icon-quantity" style={{ color: "#536471" }}>
+                    {likes.length > 0 && likes.length}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="icon-svg icon-svg-share">
+              <Share
+                onClick={(e) => handleClickShare(e, id)}
+                width={20}
+                height={20}
+                stroke="#536471"
+              />
+            </div>
           </footer>
         </section>
       </article>
@@ -95,7 +163,7 @@ export default function Tweet({
           background: #f5f8fa;
         }
 
-        div {
+        .avatar-icon {
           padding-right: 10px;
         }
 
@@ -126,6 +194,58 @@ export default function Tweet({
 
         a {
           text-decoration: none;
+        }
+
+        .icon-container {
+          display: flex;
+          align-items: center;
+        }
+
+        .icon-svg {
+          padding: 7px;
+          display: flex;
+        }
+
+        .icon-svg-like:hover {
+          background: radial-gradient(#f918801a 15%, transparent 16%);
+          background-size: 150px 150px;
+          background-position: center;
+          stroke: #f91880;
+        }
+
+        .icon-svg-like:hover > :global(svg) {
+          stroke: #f91880;
+        }
+
+        .icon-svg-share:hover {
+          background: radial-gradient(#1d9bf01a 15%, transparent 16%);
+          background-size: 150px 150px;
+          background-position: center;
+          stroke: #1d9bf0;
+        }
+
+        .icon-svg-share:hover > :global(svg) {
+          stroke: #1d9bf0;
+        }
+
+        .icon-quantity {
+          font-size: 12px;
+        }
+
+        .copied-to-clipboard {
+          align-items: center;
+          background: #1d9bf0;
+          border-radius: 4px;
+          bottom: 10%;
+          color: #ffffff;
+          display: flex;
+          height: 41px;
+          justify-content: center;
+          left: 50%;
+          position: fixed;
+          transform: translate(-50%, -50%);
+          width: 196px;
+          z-index: 1;
         }
       `}</style>
     </>

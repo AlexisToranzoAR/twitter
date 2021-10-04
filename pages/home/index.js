@@ -36,19 +36,22 @@ export default function HomePage() {
         <h2>Inicio</h2>
       </header>
       <section>
-        {timeline.map((tweet) => (
-          <Tweet
-            avatar={tweet.user.avatar}
-            content={tweet.content}
-            createdAt={tweet.createdAt}
-            id={tweet.id}
-            image={tweet.image}
-            key={tweet.id}
-            userId={tweet.user.id}
-            userName={tweet.user.userName}
-            video={tweet.video}
-          />
-        ))}
+        {timeline.map(
+          ({ user, content, createdAt, id, image, video, likes }) => (
+            <Tweet
+              avatar={user.avatar}
+              content={content}
+              createdAt={createdAt}
+              id={id}
+              image={image}
+              key={id}
+              likes={likes}
+              userId={user.id}
+              userName={user.userName}
+              video={video}
+            />
+          )
+        )}
       </section>
       <Navbar />
 

@@ -9,3 +9,28 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
   });
 
 export const firestore = admin.firestore();
+export const auth = admin.auth();
+
+const mapUserFromFirebaseAuthToUser = (user) => {
+  const { displayName, photoURL, uid } = user;
+  return {
+    avatar: photoURL,
+    userName: displayName,
+    id: uid,
+  };
+};
+
+const getUserData = async (uid) => {
+  const user = await auth.getUser(uid);
+  return user ? mapUserFromFirebaseAuthToUser(user) : null;
+};
+
+export const likeTweet = async (tweetId, userId) => {
+  const user = await getUserData(userId);
+  return firestore
+    .collection("tweets")
+    .doc(tweetId)
+    .update({
+      likes: admin.firestore.FieldValue.arrayUnion(user),
+    });
+};

@@ -82,3 +82,11 @@ export const uploadImage = (file) => {
   }
   return null;
 };
+
+export const getUserToken = async () => {
+  return firebase
+    .auth()
+    .currentUser.getIdToken(true)
+    .then((idToken) => idToken)
+    .catch(e => console.log('Fallo obteniendo la id del usuario: ', e));
+};
