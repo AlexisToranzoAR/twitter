@@ -9,6 +9,7 @@ import Avatar from "../../../components/Avatar";
 import ArrowLeft from "../../../components/Icons/ArrowLeft";
 import Navbar from "../../../components/Navbar";
 import Cross from "../../../components/Icons/Cross";
+import Loading from "../../../components/Loading";
 
 const COMPOSE_STATUS = {
   USER_NOT_KNOWN: 0,
@@ -109,7 +110,12 @@ export default function ComposeTweet() {
       </Head>
 
       <header>
-        <div onClick={router.back} role="button" tabIndex={0}>
+        <div
+          className="arrow-left-container"
+          onClick={router.back}
+          role="button"
+          tabIndex={0}
+        >
           <ArrowLeft width={19} height={19} stroke="#0F1419" />
         </div>
         <Button form="TweetForm" type="submit" disabled={isButtonDisabled}>
@@ -154,6 +160,9 @@ export default function ComposeTweet() {
                 Sorry, your browser doesn&apos;t support embedded videos.
               </video>
             </section>
+          )}
+          {drag === DRAG_IMAGE_STATES.UPLOADING && (
+            <Loading />
           )}
         </form>
       </section>
@@ -212,7 +221,7 @@ export default function ComposeTweet() {
           padding-left: 20px;
         }
 
-        div {
+        .arrow-left-container {
           align-items: center;
           display: flex;
           cursor: pointer;
@@ -230,9 +239,11 @@ export default function ComposeTweet() {
         }
 
         textarea {
-          border: ${drag === DRAG_IMAGE_STATES.DRAG_OVER
-            ? "3px dashed #09f"
-            : "3px solid transparent"};
+          border: ${
+            drag === DRAG_IMAGE_STATES.DRAG_OVER
+              ? "3px dashed #09f"
+              : "3px solid transparent"
+          };
           border-radius: 10px;
           font-size: 21px;
           min-height: 200px;
