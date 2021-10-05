@@ -25,7 +25,7 @@ export default function Tweet({
   const createdAtFormated = useDateTimeFormat(createdAt);
   const router = useRouter();
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
-
+  
   const handleArticleClick = (e) => {
     e.preventDefault();
     router.push(`/status/${id}`);
@@ -35,12 +35,12 @@ export default function Tweet({
     e.stopPropagation();
   };
 
-  const handleClickLike = async (e, tweetId) => {
+  const handleClickLike = async (e) => {
     e.stopPropagation();
     const userToken = await getUserToken();
-    fetch(`/api/tweet/like/${tweetId}`, {
-      method: "POST",
-      body: JSON.stringify({ userToken }), // data can be `string` or {object}!
+    fetch(`/api/tweet/like/${id}`, {
+      method: likes.find((like) => like.id === userId) ? "DELETE" : "POST",
+      body: JSON.stringify({ userToken }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -103,7 +103,7 @@ export default function Tweet({
                   <div
                     tabIndex={0}
                     role="button"
-                    onClick={(e) => handleClickLike(e, id)}
+                    onClick={handleClickLike}
                     className="icon-svg icon-svg-like"
                   >
                     <Heart width={20} height={20} stroke="#f91880" />
@@ -117,7 +117,7 @@ export default function Tweet({
                   <div
                     tabIndex={0}
                     role="button"
-                    onClick={(e) => handleClickLike(e, id)}
+                    onClick={handleClickLike}
                     className="icon-svg icon-svg-like"
                   >
                     <Heart width={20} height={20} stroke="#536471" />

@@ -34,3 +34,13 @@ export const likeTweet = async (tweetId, userId) => {
       likes: admin.firestore.FieldValue.arrayUnion(user),
     });
 };
+
+export const dislikeTweet = async (tweetId, userId) => {
+  const user = await getUserData(userId);
+  return firestore
+    .collection("tweets")
+    .doc(tweetId)
+    .update({
+      likes: admin.firestore.FieldValue.arrayRemove(user),
+    });
+};
